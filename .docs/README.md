@@ -1,8 +1,8 @@
 # Nettrine Extensions KnpLabs
 
-Doctrine ([KnpLabs/DoctrineBehaviors](https://github.com/KnpLabs/DoctrineBehaviors)) extension for Nette Framework
-
 ## Content
+
+Doctrine ([KnpLabs/DoctrineBehaviors](https://github.com/KnpLabs/DoctrineBehaviors)) extension for Nette Framework
 
 - [Setup](#setup)
 - [Configuration](#configuration)
