@@ -1,8 +1,8 @@
 # Nettrine Extensions KnpLabs
 
-Doctrine ([KnpLabs/DoctrineBehaviors](https://github.com/KnpLabs/DoctrineBehaviors)) extension for Nette Framework
-
 ## Content
+
+Doctrine ([KnpLabs/DoctrineBehaviors](https://github.com/KnpLabs/DoctrineBehaviors)) extension for Nette Framework
 
 - [Setup](#setup)
 - [Configuration](#configuration)
@@ -35,16 +35,16 @@ extensions:
 
 ## Configuration
 
-By default are all behaviors disabled, you have to enable them.
+By default all behaviors are disabled, you have to enable them.
 
 Most of the behaviors include a subscriber.
 If you use [nettrine/dbal](https://github.com/nettrine/dbal) then they are configured automatically.
-Otherwise you have to add them to event manager.
+Otherwise you have to add them to the Event manager.
 
-Behaviors blameable, geocodable, sluggable, softDeletable, sortable, timestampable, translatable and tree
-have option `trait` (or `*Trait`) which allows you to swap behavior implementation.
+Behaviors `blameable`, `geocodable`, `sluggable`, `softDeletable`, `sortable`, `timestampable`, `translatable` and `tree`
+have option `trait` (or `*Trait`) which allows you to swap the implementation.
 
-Behaviors blameable, geocodable, loggable and translatable accepts a callable. You may use all of following syntaxes:
+Behaviors `blameable`, `geocodable`, `loggable` and `translatable` accept a `callable`. You may use all of following syntaxes:
 
 ```yaml
 # Static method call (or any other valid callable, like 'someFunction')
@@ -56,7 +56,7 @@ exampleCallable: [@service, 'calledMethod'],
 # Reference to service which implements __invoke()
 exampleCallable: @serviceWhichImplements__invoke()
 
-# Register and use new service which implements __invoke(), like you would do in 'services' config section
+# Register and use new service which implements __invoke(), like you would in 'services' config section
 exampleCallable:
     factory: Your\Special\Service
 ```
@@ -70,7 +70,7 @@ nettrine.extensions.knplabs:
     blameable: true
 ```
 
-Or, if you want add additional options
+Or, if you want to add additional options
 
 ```yaml
 nettrine.extensions.knplabs:
@@ -141,7 +141,7 @@ nettrine.extensions.knplabs:
     geocodable: true
 ```
 
-Or, if you want add additional options
+Or, if you want to add additional options
 
 ```yaml
 nettrine.extensions.knplabs:
@@ -229,7 +229,7 @@ nettrine.extensions.knplabs:
     sluggable: true
 ```
 
-Or, if you want add additional options
+Or, if you want to add additional options
 
 ```yaml
 nettrine.extensions.knplabs:
@@ -265,7 +265,7 @@ nettrine.extensions.knplabs:
     softDeletable: true
 ```
 
-Or, if you want add additional options
+Or, if you want to add additional options
 
 ```yaml
 nettrine.extensions.knplabs:
@@ -296,7 +296,7 @@ nettrine.extensions.knplabs:
     sortable: true
 ```
 
-Or, if you want add additional options
+Or, if you want to add additional options
 
 ```yaml
 nettrine.extensions.knplabs:
@@ -341,7 +341,7 @@ nettrine.extensions.knplabs:
     timestampable: true
 ```
 
-Or, if you want add additional options
+Or, if you want to add additional options
 
 ```yaml
 nettrine.extensions.knplabs:
@@ -373,7 +373,7 @@ nettrine.extensions.knplabs:
     translatable: true
 ```
 
-Or, if you want add additional options
+Or, if you want to add additional options
 
 ```yaml
 nettrine.extensions.knplabs:
@@ -409,7 +409,7 @@ nettrine.extensions.knplabs:
     tree: true
 ```
 
-Or, if you want add additional options
+Or, if you want to add additional options
 
 ```yaml
 nettrine.extensions.knplabs:
