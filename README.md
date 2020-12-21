@@ -1,7 +1,7 @@
 ![](https://heatbadger.now.sh/github/readme/nettrine/extensions-knplabs/)
 
 <p align=center>
-  <a href="https://github.com/nettrine/extensions-knplabs/actions"><img src="https://badgen.net/github/checks/contributte/utils/master?cache=300"></a>
+  <a href="https://github.com/nettrine/extensions-knplabs/actions"><img src="https://badgen.net/github/checks/nettrine/extensions-knplabs/master?cache=300"></a>
   <a href="https://coveralls.io/r/nettrine/extensions-knplabs"><img src="https://img.shields.io/coveralls/nettrine/extensions-knplabs.svg?style=flat-square"></a>
   <a href="https://github.com/phpstan/phpstan"><img src="https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat-square"></a>
   <a href="https://packagist.org/packages/nettrine/extensions-knplabs"><img src="https://badgen.net/packagist/dm/nettrine/extensions-knplabs"></a>
