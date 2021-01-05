@@ -232,15 +232,17 @@ final class KnpLabsBehaviorExtension extends CompilerExtension
 				->setAutowired(false);
 		}
 
-		if ($config->tree !== false) {
-			$builder->addDefinition($this->prefix('tree'))
-				->setFactory(TreeSubscriber::class, [
-					$classAnalyzerDefinition,
-					$isRecursive,
-					$config->tree->nodeTrait,
-				])
-				->setAutowired(false);
+		if ($config->tree === false) {
+			return;
 		}
+
+		$builder->addDefinition($this->prefix('tree'))
+			->setFactory(TreeSubscriber::class, [
+				$classAnalyzerDefinition,
+				$isRecursive,
+				$config->tree->nodeTrait,
+			])
+			->setAutowired(false);
 	}
 
 }
