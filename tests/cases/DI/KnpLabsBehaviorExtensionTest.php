@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Nettrine\Extensions\KnpLabs\Unit\DI;
+namespace Tests\Cases\DI;
 
 use Knp\DoctrineBehaviors\Model\Blameable\Blameable;
 use Knp\DoctrineBehaviors\Model\Geocodable\Geocodable;
@@ -31,10 +31,13 @@ use Nette\Security\User;
 use Nettrine\Extensions\KnpLabs\DI\KnpLabsBehaviorExtension;
 use Nettrine\Extensions\KnpLabs\Security\UserCallable;
 use Nettrine\Extensions\KnpLabs\Tracy\LoggerCallable;
-use PHPUnit\Framework\TestCase;
-use Tests\Nettrine\Extensions\KnpLabs\Fixtures\GeolocationPointGetter;
-use Tests\Nettrine\Extensions\KnpLabs\Fixtures\LocaleGetter;
+use Tester\Assert;
+use Tester\TestCase;
+use Tests\Fixtures\GeolocationPointGetter;
+use Tests\Fixtures\LocaleGetter;
 use Tracy\Bridges\Nette\TracyExtension;
+
+require __DIR__ . '/../../bootstrap.php';
 
 final class KnpLabsBehaviorExtensionTest extends TestCase
 {
@@ -50,7 +53,7 @@ final class KnpLabsBehaviorExtensionTest extends TestCase
 		$container = new $class();
 		assert($container instanceof Container);
 
-		$this->assertInstanceOf(ClassAnalyzer::class, $container->getService('nettrine.extensions.knplabs.classAnalyzer'));
+		Assert::type(ClassAnalyzer::class, $container->getService('nettrine.extensions.knplabs.classAnalyzer'));
 	}
 
 	public function testSimple(): void
@@ -77,15 +80,15 @@ final class KnpLabsBehaviorExtensionTest extends TestCase
 		$container = new $class();
 		assert($container instanceof Container);
 
-		$this->assertInstanceOf(BlameableSubscriber::class, $container->getService('nettrine.extensions.knplabs.blameable'));
-		$this->assertInstanceOf(GeocodableSubscriber::class, $container->getService('nettrine.extensions.knplabs.geocodable'));
-		//$this->assertInstanceOf(LoggableSubscriber::class, $container->getService('nettrine.extensions.knplabs.loggable'));
-		$this->assertInstanceOf(SluggableSubscriber::class, $container->getService('nettrine.extensions.knplabs.sluggable'));
-		$this->assertInstanceOf(SoftDeletableSubscriber::class, $container->getService('nettrine.extensions.knplabs.softDeletable'));
-		$this->assertInstanceOf(SortableSubscriber::class, $container->getService('nettrine.extensions.knplabs.sortable'));
-		$this->assertInstanceOf(TimestampableSubscriber::class, $container->getService('nettrine.extensions.knplabs.timestampable'));
-		$this->assertInstanceOf(TranslatableSubscriber::class, $container->getService('nettrine.extensions.knplabs.translatable'));
-		$this->assertInstanceOf(TreeSubscriber::class, $container->getService('nettrine.extensions.knplabs.tree'));
+		Assert::type(BlameableSubscriber::class, $container->getService('nettrine.extensions.knplabs.blameable'));
+		Assert::type(GeocodableSubscriber::class, $container->getService('nettrine.extensions.knplabs.geocodable'));
+		//Assert::type(LoggableSubscriber::class, $container->getService('nettrine.extensions.knplabs.loggable'));
+		Assert::type(SluggableSubscriber::class, $container->getService('nettrine.extensions.knplabs.sluggable'));
+		Assert::type(SoftDeletableSubscriber::class, $container->getService('nettrine.extensions.knplabs.softDeletable'));
+		Assert::type(SortableSubscriber::class, $container->getService('nettrine.extensions.knplabs.sortable'));
+		Assert::type(TimestampableSubscriber::class, $container->getService('nettrine.extensions.knplabs.timestampable'));
+		Assert::type(TranslatableSubscriber::class, $container->getService('nettrine.extensions.knplabs.translatable'));
+		Assert::type(TreeSubscriber::class, $container->getService('nettrine.extensions.knplabs.tree'));
 	}
 
 	public function testComplex(): void
@@ -148,15 +151,17 @@ final class KnpLabsBehaviorExtensionTest extends TestCase
 		$container = new $class();
 		assert($container instanceof Container);
 
-		$this->assertInstanceOf(BlameableSubscriber::class, $container->getService('nettrine.extensions.knplabs.blameable'));
-		$this->assertInstanceOf(GeocodableSubscriber::class, $container->getService('nettrine.extensions.knplabs.geocodable'));
-		$this->assertInstanceOf(LoggableSubscriber::class, $container->getService('nettrine.extensions.knplabs.loggable'));
-		$this->assertInstanceOf(SluggableSubscriber::class, $container->getService('nettrine.extensions.knplabs.sluggable'));
-		$this->assertInstanceOf(SoftDeletableSubscriber::class, $container->getService('nettrine.extensions.knplabs.softDeletable'));
-		$this->assertInstanceOf(SortableSubscriber::class, $container->getService('nettrine.extensions.knplabs.sortable'));
-		$this->assertInstanceOf(TimestampableSubscriber::class, $container->getService('nettrine.extensions.knplabs.timestampable'));
-		$this->assertInstanceOf(TranslatableSubscriber::class, $container->getService('nettrine.extensions.knplabs.translatable'));
-		$this->assertInstanceOf(TreeSubscriber::class, $container->getService('nettrine.extensions.knplabs.tree'));
+		Assert::type(BlameableSubscriber::class, $container->getService('nettrine.extensions.knplabs.blameable'));
+		Assert::type(GeocodableSubscriber::class, $container->getService('nettrine.extensions.knplabs.geocodable'));
+		Assert::type(LoggableSubscriber::class, $container->getService('nettrine.extensions.knplabs.loggable'));
+		Assert::type(SluggableSubscriber::class, $container->getService('nettrine.extensions.knplabs.sluggable'));
+		Assert::type(SoftDeletableSubscriber::class, $container->getService('nettrine.extensions.knplabs.softDeletable'));
+		Assert::type(SortableSubscriber::class, $container->getService('nettrine.extensions.knplabs.sortable'));
+		Assert::type(TimestampableSubscriber::class, $container->getService('nettrine.extensions.knplabs.timestampable'));
+		Assert::type(TranslatableSubscriber::class, $container->getService('nettrine.extensions.knplabs.translatable'));
+		Assert::type(TreeSubscriber::class, $container->getService('nettrine.extensions.knplabs.tree'));
 	}
 
 }
+
+(new KnpLabsBehaviorExtensionTest())->run();
