@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Nettrine\Extensions\KnpLabs\Fixtures;
+namespace Tests\Fixtures;
 
 use Knp\DoctrineBehaviors\ORM\Geocodable\Type\Point;
 

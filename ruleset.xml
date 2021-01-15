@@ -6,10 +6,12 @@
     <!-- Specific -->
     <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
         <properties>
-            <property name="rootNamespaces" type="array" value="
-                src   => Nettrine\Extensions\KnpLabs,
-                tests => Tests\Nettrine\Extensions\KnpLabs,
-            "/>
+			<property name="rootNamespaces" type="array">
+				<element key="src" value="Nettrine\Extensions\KnpLabs"/>
+				<element key="tests/cases" value="Tests\Cases"/>
+				<element key="tests/fixtures" value="Tests\Fixtures"/>
+				<element key="tests/toolkit" value="Tests\Toolkit"/>
+			</property>
         </properties>
     </rule>
 
