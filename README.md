@@ -21,10 +21,10 @@ Website ðŸš€ <a href="https://contributte.org">contributte.org</a> | Contact ðŸ‘
 
 ## Usage
 
-To install latest version of `nettrine/extensions-knplabs` use [Composer](https://getcomposer.com).
+To install latest version of `nettrine/extensions-knplabs` use [Composer](https://getcomposer.org).
 
 ```
-composer install nettrine/extensions-knplabs
+$ composer require nettrine/extensions-knplabs
 ```
 
 ## Documentation
