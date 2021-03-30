@@ -35,8 +35,8 @@ For details on how to use this package, check out our [documentation](.docs).
 
 | State       | Version | Branch   | Nette | PHP     |
 |-------------|---------|----------|-------|---------|
-| dev         | `^0.2`  | `master` | 3.0+  | `^7.2  |
-| stable      | `^0.1`  | `master` | 3.0+  | `^7.2` |
+| dev         | `^0.3`  | `master` | 3.0+  | `>=7.2  |
+| stable      | `^0.2`  | `master` | 3.0+  | `>=7.2` |
 
 
 ## Development
@@ -45,10 +45,6 @@ See [how to contribute](https://contributte.org) to this package. This package i
 
 <a href="https://github.com/f3l1x">
     <img width="80" height="80" src="https://avatars2.githubusercontent.com/u/538058?v=3&s=80">
-</a>
-
-<a href="https://github.com/mabar">
-    <img width="80" height="80" src="https://avatars2.githubusercontent.com/u/20974277?v=3&s=80">
 </a>
 
 -----
