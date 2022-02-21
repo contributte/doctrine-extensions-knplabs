@@ -4,7 +4,7 @@ namespace Nettrine\Extensions\KnpLabs\Security;
 
 use Nette\Security\User;
 
-final class UserCallable
+final class UserCallable implements \Knp\DoctrineBehaviors\Contract\Provider\UserProviderInterface
 {
 
 	/** @var User */
@@ -15,11 +15,18 @@ final class UserCallable
 		$this->user = $user;
 	}
 
-	public function __invoke(): ?string
+
+	public function provideUser()
 	{
 		$id = $this->user->getId();
 
 		return $id !== null ? (string) $id : null;
+	}
+
+
+	public function provideUserEntity(): ?string
+	{
+		return \get_class($this->user);
 	}
 
 }
