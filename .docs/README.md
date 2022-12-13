@@ -1,4 +1,4 @@
-# Nettrine Extensions KnpLabs
+# Contributte Doctrine Extensions KnpLabs
 
 ## Content
 
@@ -38,7 +38,7 @@ extensions:
 By default all behaviors are disabled, you have to enable them.
 
 Most of the behaviors include a subscriber.
-If you use [nettrine/dbal](https://github.com/nettrine/dbal) then they are configured automatically.
+If you use [nettrine/dbal](https://github.com/contributte/doctrine-dbal) then they are configured automatically.
 Otherwise you have to add them to the Event manager.
 
 Behaviors `blameable`, `geocodable`, `sluggable`, `softDeletable`, `sortable`, `timestampable`, `translatable` and `tree`

@@ -4,7 +4,7 @@
   "keywords": ["contributte", "nette", "doctrine", "orm", "database"],
   "type": "library",
   "license": "MIT",
-  "homepage": "https://github.com/nettrine/extensions-knplabs",
+  "homepage": "https://github.com/contributte/doctrine-extensions-knplabs",
   "authors": [
     {
       "name": "Milan Felix Šulc",
