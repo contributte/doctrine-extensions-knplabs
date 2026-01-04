@@ -12,7 +12,6 @@ class DefaultLocaleProvider implements LocaleProviderInterface
 		return null;
 	}
 
-
 	public function provideFallbackLocale(): ?string
 	{
 		return null;

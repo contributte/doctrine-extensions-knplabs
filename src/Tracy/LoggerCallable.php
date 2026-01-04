@@ -7,12 +7,10 @@ use Tracy\ILogger;
 final class LoggerCallable
 {
 
-	/** @var ILogger */
-	private $logger;
-
-	public function __construct(ILogger $logger)
+	public function __construct(
+		private ILogger $logger,
+	)
 	{
-		$this->logger = $logger;
 	}
 
 	public function __invoke(string $message): void
