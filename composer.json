@@ -1,7 +1,7 @@
 {
   "name": "nettrine/extensions-knplabs",
   "description": "Doctrine2 behavioral extensions for Nette Framework",
-  "keywords": ["contributte", "nette", "doctrine", "orm", "database"],
+  "keywords": ["nette", "doctrine", "orm", "database", "knplabs", "behaviors"],
   "type": "library",
   "license": "MIT",
   "homepage": "https://github.com/contributte/doctrine-extensions-knplabs",
@@ -12,22 +12,18 @@
     }
   ],
   "require": {
-    "php": ">=7.2",
-    "contributte/di": "^0.5.0",
-    "doctrine/orm": "^2.5.0",
-    "knplabs/doctrine-behaviors": "^2.0.8"
+    "php": ">=8.2",
+    "nette/di": "^3.2.2",
+    "nette/security": "^3.2.0",
+    "doctrine/orm": "^3.0.0",
+    "knplabs/doctrine-behaviors": "^3.0.0"
   },
   "require-dev": {
-    "nette/http": "^3.0.0",
-    "nette/security": "^3.0.0",
-    "nettrine/orm": "^0.8.1",
-    "ninjify/nunjuck": "^0.4.0",
-    "ninjify/qa": "^0.12.0",
-    "phpstan/extension-installer": "^1.0",
-    "phpstan/phpstan-deprecation-rules": "^0.12",
-    "phpstan/phpstan-nette": "^0.12",
-    "phpstan/phpstan-strict-rules": "^0.12",
-    "tracy/tracy": "^2.7.0"
+    "contributte/qa": "^0.4.0",
+    "contributte/tester": "^0.3.0",
+    "contributte/phpstan": "^0.2.0",
+    "nette/http": "^3.3.0",
+    "tracy/tracy": "^2.10.0"
   },
   "autoload": {
     "psr-4": {
@@ -36,8 +32,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\Cases\\": "tests/cases",
-      "Tests\\Fixtures\\": "tests/fixtures"
+      "Tests\\": "tests"
     }
   },
   "minimum-stability": "dev",
@@ -50,7 +45,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "0.3.x-dev"
+      "dev-master": "0.4.x-dev"
     }
   }
 }
