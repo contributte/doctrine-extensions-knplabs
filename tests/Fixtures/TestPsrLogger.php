@@ -8,9 +8,12 @@ final class TestPsrLogger extends AbstractLogger
 {
 
 	/**
+	 * @param mixed $level
+	 * @param string $message
 	 * @param mixed[] $context
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 */
-	public function log(mixed $level, \Stringable|string $message, array $context = []): void
+	public function log($level, $message, array $context = []): void
 	{
 		// No-op for testing
 	}
