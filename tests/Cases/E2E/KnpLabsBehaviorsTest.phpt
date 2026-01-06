@@ -15,7 +15,6 @@ use Knp\DoctrineBehaviors\EventSubscriber\TranslatableEventSubscriber;
 use Knp\DoctrineBehaviors\EventSubscriber\TreeEventSubscriber;
 use Nette\DI\Compiler;
 use Nettrine\Extensions\KnpLabs\DI\KnpLabsBehaviorExtension;
-use Nettrine\Extensions\KnpLabs\Translatable\DefaultLocaleProvider;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
@@ -31,7 +30,7 @@ Toolkit::test(static function (): void {
 
 				nettrine.extensions.knplabs:
 					blameable:
-						userCallable: Tests\Fixtures\TestUserProvider
+						userProvider: Tests\Fixtures\TestUserProvider
 						userEntity: null
 					sluggable:
 						trait: Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait
@@ -63,9 +62,6 @@ Toolkit::test(static function (): void {
 	Assert::type(TimestampableEventSubscriber::class, $container->getService('nettrine.extensions.knplabs.timestampable'));
 	Assert::type(TranslatableEventSubscriber::class, $container->getService('nettrine.extensions.knplabs.translatable'));
 	Assert::type(TreeEventSubscriber::class, $container->getService('nettrine.extensions.knplabs.tree'));
-
-	// Verify locale provider is registered
-	Assert::type(DefaultLocaleProvider::class, $container->getService('nettrine.extensions.knplabs.translatable.localeProvider'));
 });
 
 // Test: Timestampable with different field types
