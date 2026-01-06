@@ -7,13 +7,9 @@ Doctrine ([KnpLabs/DoctrineBehaviors](https://github.com/KnpLabs/DoctrineBehavio
 - [Setup](#setup)
 - [Configuration](#configuration)
     - [Blameable](#blameable)
-    - [Filterable](#filterable)
-    - [Geocodable](#geocodable)
-    - [Joinable](#joinable)
     - [Loggable](#loggable)
     - [Sluggable](#sluggable)
     - [SoftDeletable](#softdeletable)
-    - [Sortable](#sortable)
     - [Timestampable](#timestampable)
     - [Translatable](#translatable)
     - [Tree](#tree)
@@ -41,27 +37,20 @@ Most of the behaviors include a subscriber.
 If you use [nettrine/dbal](https://github.com/contributte/doctrine-dbal) then they are configured automatically.
 Otherwise you have to add them to the Event manager.
 
-Behaviors `blameable`, `geocodable`, `sluggable`, `softDeletable`, `sortable`, `timestampable`, `translatable` and `tree`
+Behaviors `blameable`, `sluggable`, `softDeletable`, `timestampable`, `translatable` and `tree`
 have option `trait` (or `*Trait`) which allows you to swap the implementation.
 
-Behaviors `blameable`, `geocodable`, `loggable` and `translatable` accept a `callable`. You may use all of following syntaxes:
+Service references can be provided in two formats:
 
 ```yaml
-# Static method call (or any other valid callable, like 'someFunction')
-exampleCallable: [StaticClass, 'calledMethod']
+# Service reference (starts with @)
+exampleService: @App\MyService
 
-# Service method call
-exampleCallable: [@service, 'calledMethod'],
-
-# Reference to service which implements __invoke()
-exampleCallable: @serviceWhichImplements__invoke()
-
-# Register and use new service which implements __invoke(), like you would in 'services' config section
-exampleCallable:
-    factory: Your\Special\Service
+# Class name (will be autowired)
+exampleService: App\MyService
 ```
 
-### [Blameable](https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#blameable)
+### [Blameable](https://github.com/KnpLabs/DoctrineBehaviors#blameable)
 
 Enable behavior
 
@@ -75,152 +64,52 @@ Or, if you want to add additional options
 ```yaml
 nettrine.extensions.knplabs:
     blameable:
-        userCallable: callable ## returns object specified by userEntity or object which implements __toString() or string
-        userEntity: Your\User\Entity
-        trait: YourBlameableTrait
+        userProvider: App\Security\MyUserProvider  # implements UserProviderInterface
+        userEntity: App\Entity\User
+        trait: App\Blameable\MyBlameableTrait
 ```
 
-You may use `Nettrine\Extensions\KnpLabs\Security\UserCallable` for `Nette\Security\User::getId()`
+You may use `Nettrine\Extensions\KnpLabs\Security\UserCallable` for integration with `Nette\Security\User::getId()`.
 
 Use trait in entity
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface;
+use Knp\DoctrineBehaviors\Model\Blameable\BlameableTrait;
 
-class BlameableEntity
+#[ORM\Entity]
+class Article implements BlameableInterface
 {
-
-	use Behaviors\Blameable\Blameable;
-
+    use BlameableTrait;
 }
 ```
 
-### [Filterable](https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#filterable)
-
-Use trait in repository and implement abstract methods
-
-```php
-use Doctrine\ORM\EntityRepository;
-use Knp\DoctrineBehaviors\ORM as Behaviors;
-
-final class FilterableRepository extends EntityRepository
-{
-
-    use Behaviors\Filterable\FilterableRepository;
-
-    public function getLikeFilterColumns(): array
-    {
-        // TODO: Implement getLikeFilterColumns() method.
-    }
-
-    public function getILikeFilterColumns(): array
-    {
-        // TODO: Implement getILikeFilterColumns() method.
-    }
-
-    public function getEqualFilterColumns(): array
-    {
-        // TODO: Implement getEqualFilterColumns() method.
-    }
-
-    public function getInFilterColumns(): array
-    {
-        // TODO: Implement getInFilterColumns() method.
-    }
-
-}
-```
-
-### [Geocodable](https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#geocodable)
-
-Enable behavior
-
-```yaml
-nettrine.extensions.knplabs:
-    geocodable: true
-```
-
-Or, if you want to add additional options
-
-```yaml
-nettrine.extensions.knplabs:
-    geocodable:
-        geolocationCallable: callable # accepts entity, returns Point|false
-        trait: YourGeocodableTrait
-```
-
-Use trait in entity
-
-```php
-use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
-
-class GeocodableEntity
-{
-
-	use Behaviors\Geocodable\Geocodable;
-
-}
-```
-
-Use trait in repository
-
-```php
-use Doctrine\ORM\EntityRepository;
-use Knp\DoctrineBehaviors\ORM as Behaviors;
-
-final class GeocodableRepository extends EntityRepository
-{
-
-    use Behaviors\Geocodable\GeocodableRepository;
-
-}
-```
-
-### Joinable
-
-Use trait in repository
-
-```php
-use Doctrine\ORM\EntityRepository;
-use Knp\DoctrineBehaviors\ORM as Behaviors;
-
-final class JoinableRepository extends EntityRepository
-{
-
-    use Behaviors\Joinable\JoinableRepository;
-
-}
-```
-
-### [Loggable](https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#loggable)
+### [Loggable](https://github.com/KnpLabs/DoctrineBehaviors#loggable)
 
 Enable behavior
 
 ```yaml
 nettrine.extensions.knplabs:
     loggable:
-        loggerCallable: callable # accepts message
+        logger: @Psr\Log\LoggerInterface  # PSR-3 compatible logger
 ```
-
-You may use `Knp\DoctrineBehaviors\ORM\Loggable\LoggerCallable` for PSR-3 logger or `Nettrine\Extensions\KnpLabs\Tracy\LoggerCallable` for Tracy logger.
 
 Use trait in entity
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\LoggableInterface;
+use Knp\DoctrineBehaviors\Model\Loggable\LoggableTrait;
 
-class LoggableEntity
+#[ORM\Entity]
+class Article implements LoggableInterface
 {
-
-	use Behaviors\Loggable\Loggable;
-
+    use LoggableTrait;
 }
 ```
 
-### [Sluggable](https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#sluggable)
+### [Sluggable](https://github.com/KnpLabs/DoctrineBehaviors#sluggable)
 
 Enable behavior
 
@@ -234,29 +123,35 @@ Or, if you want to add additional options
 ```yaml
 nettrine.extensions.knplabs:
     sluggable:
-        trait: YourSluggableTrait
+        trait: App\Sluggable\MySluggableTrait
 ```
 
 Use trait in entity and implement abstract methods
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
-class SluggableEntity
+#[ORM\Entity]
+class Article implements SluggableInterface
 {
+    use SluggableTrait;
 
-	use Behaviors\Sluggable\Sluggable;
+    #[ORM\Column]
+    private string $title;
 
+    /**
+     * @return string[]
+     */
     public function getSluggableFields(): array
     {
-        // TODO: Implement getSluggableFields() method.
+        return ['title'];
     }
-
 }
 ```
 
-### [SoftDeletable](https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#softDeletable)
+### [SoftDeletable](https://github.com/KnpLabs/DoctrineBehaviors#softdeletable)
 
 Enable behavior
 
@@ -270,69 +165,24 @@ Or, if you want to add additional options
 ```yaml
 nettrine.extensions.knplabs:
     softDeletable:
-        trait: YourSoftDeletableTrait
+        trait: App\SoftDeletable\MySoftDeletableTrait
 ```
 
 Use trait in entity
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
+use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 
-class SoftDeletableEntity
+#[ORM\Entity]
+class Article implements SoftDeletableInterface
 {
-
-	use Behaviors\SoftDeletable\SoftDeletable;
-
+    use SoftDeletableTrait;
 }
 ```
 
-### Sortable
-
-Enable behavior
-
-```yaml
-nettrine.extensions.knplabs:
-    sortable: true
-```
-
-Or, if you want to add additional options
-
-```yaml
-nettrine.extensions.knplabs:
-    sortable:
-        trait: YourSortableTrait
-```
-
-Use trait in entity
-
-```php
-use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
-
-class SortableEntity
-{
-
-	use Behaviors\Sortable\Sortable;
-
-}
-```
-
-Use trait in repository
-
-```php
-use Doctrine\ORM\EntityRepository;
-use Knp\DoctrineBehaviors\ORM as Behaviors;
-
-final class SortableRepository extends EntityRepository
-{
-
-    use Behaviors\Sortable\SortableRepository;
-
-}
-```
-
-### [Timestampable](https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#timestampable)
+### [Timestampable](https://github.com/KnpLabs/DoctrineBehaviors#timestampable)
 
 Enable behavior
 
@@ -346,25 +196,25 @@ Or, if you want to add additional options
 ```yaml
 nettrine.extensions.knplabs:
     timestampable:
-        dbFieldType: datetime | datetimetz | timestamp | timestamptz | ... # default: datetime
-        trait: YourTimestampableTrait
+        dbFieldType: datetime  # datetime | datetimetz | timestamp | timestamptz | ...
+        trait: App\Timestampable\MyTimestampableTrait
 ```
 
 Use trait in entity
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
-class TimestampableEntity
+#[ORM\Entity]
+class Article implements TimestampableInterface
 {
-
-	use Behaviors\Timestampable\Timestampable;
-
+    use TimestampableTrait;
 }
 ```
 
-### [Translatable](#https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#translatable)
+### [Translatable](https://github.com/KnpLabs/DoctrineBehaviors#translatable)
 
 Enable behavior
 
@@ -378,29 +228,47 @@ Or, if you want to add additional options
 ```yaml
 nettrine.extensions.knplabs:
     translatable:
-        currentLocaleCallable: callable # returns current locale or null
-        defaultLocaleCallable: callable # returns default locale or null
-        translatableFetchMode: LAZY | EAGER | EXTRA_LAZY # default: LAZY
-        translationFetchMode: LAZY | EAGER | EXTRA_LAZY # default: LAZY
-        translatableTrait: YourTranslatableTrait
-        translationTrait: YourTranslationTrait
+        localeProvider: App\Translatable\MyLocaleProvider  # implements LocaleProviderInterface
+        translatableFetchMode: LAZY  # LAZY | EAGER | EXTRA_LAZY
+        translationFetchMode: LAZY   # LAZY | EAGER | EXTRA_LAZY
+        translatableTrait: App\Translatable\MyTranslatableTrait
+        translationTrait: App\Translatable\MyTranslationTrait
 ```
+
+You may use `Nettrine\Extensions\KnpLabs\Translatable\DefaultLocaleProvider` as a base implementation.
 
 Use trait in entity
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
-class TranslatableEntity
+#[ORM\Entity]
+class Article implements TranslatableInterface
 {
-
-	use Behaviors\Translatable\Translatable;
-
+    use TranslatableTrait;
 }
 ```
 
-### [Tree](https://github.com/KnpLabs/DoctrineBehaviors/tree/v1#tree)
+And in the translation entity
+
+```php
+use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
+
+#[ORM\Entity]
+class ArticleTranslation implements TranslationInterface
+{
+    use TranslationTrait;
+
+    #[ORM\Column]
+    private string $title;
+}
+```
+
+### [Tree](https://github.com/KnpLabs/DoctrineBehaviors#tree)
 
 Enable behavior
 
@@ -414,33 +282,19 @@ Or, if you want to add additional options
 ```yaml
 nettrine.extensions.knplabs:
     tree:
-        nodeTrait: YourTreeNodeTrait
+        nodeTrait: App\Tree\MyTreeNodeTrait
 ```
 
 Use trait in entity and implement interface
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as Behaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface;
+use Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait;
 
-class TreeEntity implements Behaviors\Tree\NodeInterface
+#[ORM\Entity]
+class Category implements TreeNodeInterface
 {
-
-	use Behaviors\Tree\Node;
-
-}
-```
-
-Use trait in repository
-
-```php
-use Doctrine\ORM\EntityRepository;
-use Knp\DoctrineBehaviors\ORM as Behaviors;
-
-final class TreeRepository extends EntityRepository
-{
-
-    use Behaviors\Tree\Tree;
-
+    use TreeNodeTrait;
 }
 ```

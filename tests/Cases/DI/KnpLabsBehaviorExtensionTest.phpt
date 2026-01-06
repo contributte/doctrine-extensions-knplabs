@@ -43,7 +43,7 @@ Toolkit::test(static function (): void {
 
 				nettrine.extensions.knplabs:
 					blameable:
-						userCallable: Tests\Fixtures\TestUserProvider
+						userProvider: Tests\Fixtures\TestUserProvider
 			NEON
 			));
 		})
@@ -158,7 +158,7 @@ Toolkit::test(static function (): void {
 
 				nettrine.extensions.knplabs:
 					blameable:
-						userCallable: Tests\Fixtures\TestUserProvider
+						userProvider: Tests\Fixtures\TestUserProvider
 					sluggable: true
 					softDeletable: true
 					timestampable: true

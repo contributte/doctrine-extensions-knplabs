@@ -18,11 +18,10 @@ use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 use Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait;
 use Knp\DoctrineBehaviors\Repository\DefaultSluggableRepository;
 use Nette\DI\CompilerExtension;
-use Nette\DI\Definitions\ServiceDefinition;
 use Nette\DI\Definitions\Statement;
-use Nette\Schema\Elements\AnyOf;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
+use Nettrine\Extensions\KnpLabs\DI\Helpers\SmartStatement;
 use Nettrine\Extensions\KnpLabs\Security\UserCallable;
 use Nettrine\Extensions\KnpLabs\Translatable\DefaultLocaleProvider;
 use stdClass;
@@ -48,14 +47,14 @@ final class KnpLabsBehaviorExtension extends CompilerExtension
 				Expect::bool(),
 				Expect::structure([
 					'trait' => Expect::string(BlameableTrait::class),
-					'userCallable' => $this->getCallableSchema()->default(UserCallable::class),
+					'userProvider' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->default(UserCallable::class),
 					'userEntity' => Expect::string()->nullable(),
 				])
 			)->default(false)->before($trueToStructureCb),
 			'loggable' => Expect::anyOf(
 				false,
 				Expect::structure([
-					'logger' => $this->getCallableSchema()->required(),
+					'logger' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->required(),
 				])
 			)->default(false),
 			'sluggable' => Expect::anyOf(
@@ -80,7 +79,7 @@ final class KnpLabsBehaviorExtension extends CompilerExtension
 			'translatable' => Expect::anyOf(
 				Expect::bool(),
 				Expect::structure([
-					'localeProvider' => $this->getCallableSchema()->default(DefaultLocaleProvider::class),
+					'localeProvider' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->default(DefaultLocaleProvider::class),
 					'translatableFetchMode' => Expect::anyOf('LAZY', 'EAGER', 'EXTRA_LAZY', Expect::int())->default('LAZY'),
 					'translationFetchMode' => Expect::anyOf('LAZY', 'EAGER', 'EXTRA_LAZY', Expect::int())->default('LAZY'),
 					'translatableTrait' => Expect::string(TranslatableTrait::class),
@@ -102,15 +101,10 @@ final class KnpLabsBehaviorExtension extends CompilerExtension
 		$config = $this->config;
 
 		if ($config->blameable !== false) {
-			$userProvider = $this->resolveCallable(
-				$config->blameable->userCallable,
-				$this->prefix('blameable.userProvider')
-			);
-
 			$builder->addDefinition($this->prefix('blameable'))
 				->setType(BlameableEventSubscriber::class)
 				->setArguments([
-					'userProvider' => $userProvider,
+					'userProvider' => SmartStatement::from($config->blameable->userProvider),
 					'blameableUserEntity' => $config->blameable->userEntity,
 				])
 				->setAutowired(false);
@@ -120,7 +114,7 @@ final class KnpLabsBehaviorExtension extends CompilerExtension
 			$builder->addDefinition($this->prefix('loggable'))
 				->setType(LoggableEventSubscriber::class)
 				->setArguments([
-					$config->loggable->logger,
+					SmartStatement::from($config->loggable->logger),
 				])
 				->setAutowired(false);
 		}
@@ -154,15 +148,10 @@ final class KnpLabsBehaviorExtension extends CompilerExtension
 		}
 
 		if ($config->translatable !== false) {
-			$localeProvider = $this->resolveCallable(
-				$config->translatable->localeProvider,
-				$this->prefix('translatable.localeProvider')
-			);
-
 			$builder->addDefinition($this->prefix('translatable'))
 				->setType(TranslatableEventSubscriber::class)
 				->setArguments([
-					$localeProvider,
+					SmartStatement::from($config->translatable->localeProvider),
 					$config->translatable->translatableFetchMode,
 					$config->translatable->translationFetchMode,
 				])
@@ -175,68 +164,6 @@ final class KnpLabsBehaviorExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('tree'))
 			->setType(TreeEventSubscriber::class)
-			->setAutowired(false);
-	}
-
-	private function getCallableSchema(): AnyOf
-	{
-		return Expect::anyOf(Expect::string(), Expect::array(), Expect::type(Statement::class));
-	}
-
-	private function resolveCallable(mixed $callable, string $serviceName): ServiceDefinition|string
-	{
-		$builder = $this->getContainerBuilder();
-
-		// Service reference (e.g., @serviceName)
-		if (is_string($callable) && str_starts_with($callable, '@')) {
-			return $callable;
-		}
-
-		// Class name - create a service definition
-		if (is_string($callable) && class_exists($callable)) {
-			return $builder->addDefinition($serviceName)
-				->setType($callable)
-				->setAutowired(false);
-		}
-
-		// Statement - use as factory
-		if ($callable instanceof Statement) {
-			return $builder->addDefinition($serviceName)
-				->setFactory($callable)
-				->setAutowired(false);
-		}
-
-		// Array format [class, arguments] or [class => arguments]
-		if (is_array($callable)) {
-			$def = $builder->addDefinition($serviceName)
-				->setAutowired(false);
-
-			if (isset($callable[0]) && is_string($callable[0])) {
-				$def->setType($callable[0]);
-				if (isset($callable[1]) && is_array($callable[1])) {
-					$def->setArguments($callable[1]);
-				}
-			} else {
-				$class = array_key_first($callable);
-				if (is_string($class)) {
-					$def->setType($class);
-					$args = $callable[$class];
-					if (is_array($args)) {
-						$def->setArguments($args);
-					}
-				}
-			}
-
-			return $def;
-		}
-
-		// Fallback for string service reference without @
-		if (is_string($callable)) {
-			return $callable;
-		}
-
-		// Create definition for unknown callable
-		return $builder->addDefinition($serviceName)
 			->setAutowired(false);
 	}
 
