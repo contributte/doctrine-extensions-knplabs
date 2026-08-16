@@ -50,7 +50,7 @@ composer require nettrine/extensions-knplabs
 
 Register extension:
 
-```yaml
+```neon
 extensions:
     nettrine.extensions.knplabs: Nettrine\Extensions\KnpLabs\DI\KnpLabsBehaviorExtension
 ```
